@@ -565,17 +565,18 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
     .then((data) => {
       const content = b64DecodeUnicode(data.content);
       fileExtension = filePath.split('.').pop().toLowerCase();
-      let parsedBlocks;
+      let parsedBlocks = splitBlocks(content, fileExtension);
 
-      if (fileExtension === 'js') {
-        parsedBlocks = parseJsCodeUsingAcorn(content);
-      } else if (fileExtension === 'lisp') {
-        parsedBlocks = parseLispCode(content);
-      } else {
-        console.error('Unsupported file type');
-        return;
+      if (parsedBlocks.length === 0 || parsedBlocks.some(block => block === null)) {
+        if (fileExtension === 'js') {
+          parsedBlocks = parseJsCodeUsingAcorn(content);
+        } else if (fileExtension === 'lisp') {
+          parsedBlocks = parseLispCode(content);
+        } else {
+          console.error('Unsupported file type');
+          return;
+        }
       }
-
       createDraggableWindows(parsedBlocks);
     })
     .catch((error) => {
@@ -599,11 +600,13 @@ function parseJsCodeUsingAcorn(code) {
   return blocks;
 }
 
+const splitBlocks = (text, fileExtension) => {
+  const commentChar = fileExtension === 'js' ? '//' : ';';
+  const blocks = text.split(`${commentChar}code+window-`).slice(1);
+  const regexPattern = `^${commentChar}code\\+(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=;code\\+window-|$)`;
 
-const splitBlocks = (text) => {
-  const blocks = text.split(';code+window-').slice(1);
   return blocks.map((block) => {
-    const match = block.match(/^(\d+),(\d+(?:\.\d+)?)px,(\d+(?:\.\d+)?)px\n?([\s\S]*?)(?=;code+window-|$)/);
+    const match = block.match(new RegExp(regexPattern));
     if (!match) {
       console.log("Unmatched block content:", block);
       return null;
@@ -617,6 +620,7 @@ const splitBlocks = (text) => {
     };
   });
 };
+
 
 function parseLispCode(code) {
   let codeBlocks = [];
