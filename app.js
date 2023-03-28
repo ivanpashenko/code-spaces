@@ -111,7 +111,7 @@ selectionBox.style.pointerEvents = "none";
 //code+window-22,24570px,20000px
 boardContainer.appendChild(selectionBox);
 
-//code+window-23,24529px,19617px
+//code+window-23,24528px,19629px
 boardContainer.addEventListener("mousedown", (e) => {
   // Return early if the Space button is down or panning is active
   if (dragBoard || isPanning) {
@@ -497,7 +497,7 @@ addTextButton.addEventListener("click", () => {
 //code+window-61,25350px,20000px
 let newTextElement = false;
 
-//code+window-62,25370px,20000px
+//code+window-62,25362px,19629px
 function addTextToBoard(x, y) {
   const textEl = document.createElement("div");
   textEl.classList.add("text");
