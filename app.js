@@ -168,10 +168,10 @@ function startSelection(e) {
     });
 
     //updateSelectionBoxBorder()
-    
+
     isSelecting = true;
     startX = e.offsetX * scale;
-    startY = e.offsetY * scale ;
+    startY = e.offsetY * scale;
 
     selectionBox.style.left = startX + 'px';
     selectionBox.style.top = startY + 'px';
@@ -181,17 +181,17 @@ function startSelection(e) {
     selectionBox.style.display = 'block'; // Add this line
 
     selectionBox.classList.add('active');
-    
+
     //console.log("startX: ", startX, "startY: ", startY); // Add this line
-    
+
     document.addEventListener("mousemove", updateSelection);
   }
 }
 
 //code+window-33,24790px,20000px
-function updateSelection(e) { 
+function updateSelection(e) {
   if (isSelecting) {
-                
+
     const x = e.offsetX * scale;
     const y = e.offsetY * scale;
     const width = Math.abs(x - startX);
@@ -210,7 +210,7 @@ function updateSelection(e) {
 function endSelection() {
   if (isSelecting) {
     selectWindowsInsideSelectionBox(); // Call the function to select windows inside the selection box
-    
+
     isSelecting = false;
     selectionBox.style.display = 'none';
     boardContainer.removeEventListener('mousemove', updateSelection);
@@ -225,7 +225,7 @@ function endSelection() {
 //code+window-35,24830px,20000px
 function selectWindowsInsideSelectionBox() {
   console.log("here")
-  
+
   const sb = selectionBox.getBoundingClientRect();
 
   // Iterate over all the code windows
@@ -235,9 +235,9 @@ function selectWindowsInsideSelectionBox() {
     console.log("w.left: ", w.left, "sb.left: ", sb.left, "sb.right: ", sb.right, "w.left", w.left);
     // Check if the selection box intersects with the current code window
     if (sb.left < w.right &&
-        sb.right > w.left &&
-        sb.top < w.bottom &&
-        sb.bottom > w.top
+      sb.right > w.left &&
+      sb.top < w.bottom &&
+      sb.bottom > w.top
     ) {
       // If it intersects, add the current code window to the active windows
       console.log("intersect");
@@ -526,7 +526,7 @@ function addTextToBoard(x, y) {
 
   textEl.addEventListener('mousedown', startDrag)
   textEl.addEventListener('mousedup', endDrag)
-    
+
   textEl.addEventListener('dblclick', (e) => {
     if (!newTextElement) {
       textEl.contentEditable = true; // Enable editing on double-click
@@ -655,7 +655,7 @@ function parseJsCodeUsingAcorn(code) {
 const splitBlocks = (text, fileExtension) => {
   const commentChar = fileExtension === 'js' ? '//' : ';';
   const blocks = text.split(`${commentChar}code+window-`).slice(1);
-  const regexPattern = `^${commentChar}code\\+(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=;code\\+window-|$)`;
+  const regexPattern = `^${commentChar}code\\+(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=${commentChar}code\\+window-|$)`;
 
   return blocks.map((block) => {
     const match = block.match(new RegExp(regexPattern));
@@ -672,6 +672,7 @@ const splitBlocks = (text, fileExtension) => {
     };
   });
 };
+
 
 //code+window-77,25670px,20000px
 function parseLispCode(code) {
@@ -755,9 +756,9 @@ const saveButton = document.getElementById("saveButton");
 saveButton.addEventListener("click", () => {
   //const branch = "wavyton-spaces";
   const commitMessage = "Update combined";
-  
+
   const combinedCode = concatenateCodePieces(fileExtension);
-  
+
   pushFileToGitHub(owner, repo, branch, token, filePath, commitMessage, combinedCode);
 });
 
@@ -781,7 +782,7 @@ async function pushFileToGitHub(owner, repo, branch, token, filePath, commitMess
       console.error("Error fetching the file:", fileResponse.statusText);
       return;
     }
-    
+
     const base64Content = b64EncodeUnicode(content);
     //const base64Content = b64EncodeUnicode(unescape(encodeURIComponent(content)));
 
