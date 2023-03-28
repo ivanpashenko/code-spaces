@@ -701,9 +701,9 @@ const saveButton = document.getElementById("saveButton");
 
 saveButton.addEventListener("click", () => {
   //const branch = "wavyton-spaces";
-  const commitMessage = "Update combined.lisp";
+  const commitMessage = "Update combined";
   
-  const combinedCode = concatenateCodePieces();
+  const combinedCode = concatenateCodePieces(fileExtension);
   
   pushFileToGitHub(owner, repo, branch, token, filePath, commitMessage, combinedCode);
 });
