@@ -111,7 +111,7 @@ selectionBox.style.pointerEvents = "none";
 //code+window-22,24570px,20000px
 boardContainer.appendChild(selectionBox);
 
-//code+window-23,24590px,20000px
+//code+window-23,24528px,19629px
 boardContainer.addEventListener("mousedown", (e) => {
   // Return early if the Space button is down or panning is active
   if (dragBoard || isPanning) {
@@ -319,7 +319,7 @@ function endDrag() {
   document.removeEventListener("mousemove", moveWindow);
 }
 
-//code+window-41,24950px,20000px
+//code+window-41,24828px,19598px
 function moveWindow(e) {
   if (activeWindow) {
     const deltaX = e.clientX - offsetX;
@@ -463,14 +463,14 @@ function startPanning(e) {
   }
 }
 
-//code+window-56,25489.1px,19563px
+//code+window-56,25250px,20000px
 function endPanning() {
   isPanning = false;
   boardContainer.style.cursor = "";
   document.removeEventListener("mousemove", panBoard);
 }
 
-//code+window-57,25485.2px,19723.9px
+//code+window-57,25270px,20000px
 function panBoard(e) {
   if (isPanning) {
     e.preventDefault();
@@ -497,7 +497,7 @@ addTextButton.addEventListener("click", () => {
 //code+window-61,25350px,20000px
 let newTextElement = false;
 
-//code+window-62,24770px,19226.1px
+//code+window-62,25362px,19629px
 function addTextToBoard(x, y) {
   const textEl = document.createElement("div");
   textEl.classList.add("text");
