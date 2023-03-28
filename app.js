@@ -10,7 +10,7 @@ board.style.width = `${boardWidth}px`;
 board.style.height = `${boardHeight}px`;
 
 let parsedBlocks = []
-let owner, repo, filePath, token;
+let owner, repo, filePath, branch, token;
 let windowCounter = 0; // Add a window counter to assign unique IDs
 
 boardContainer.scrollLeft = (boardWidth - boardContainer.clientWidth) / 2;
@@ -537,12 +537,15 @@ submitButton.addEventListener("click", () => {
   owner = document.getElementById("owner").value;
   repo = document.getElementById("repo").value;
   filePath = document.getElementById("path").value;
+  branch = document.getElementById("branch").value;
   token = document.getElementById("token").value;
 
-  fetchFileFromGitHub(owner, repo, "wavyton-spaces", filePath, token);
+  fetchFileFromGitHub(owner, repo, branch, filePath, token);
   overlay.style.display = "none";
   popup.style.display = "none";
 });
+
+let fileExtension;
 
 function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
   const headers = new Headers();
@@ -560,25 +563,20 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
       }
     })
     .then((data) => {
-      //const content = decodedContent(data.content);
       const content = b64DecodeUnicode(data.content);
-      const fileExtension = filePath.split('.').pop().toLowerCase();
-      let parsedBlocks = splitBlocks(content);
+      fileExtension = filePath.split('.').pop().toLowerCase();
+      let parsedBlocks;
 
-      if (parsedBlocks.length === 0 || parsedBlocks.some(block => block === null)) {
-        const expressions = parseLispCode(content);
-        parsedBlocks = expressions;
-        createDraggableWindows(expressions);
+      if (fileExtension === 'js') {
+        parsedBlocks = parseJsCodeUsingAcorn(content);
+      } else if (fileExtension === 'lisp') {
+        parsedBlocks = parseLispCode(content);
       } else {
-        if (fileExtension === 'js') {
-          parsedBlocks = parseJsCode(content);
-        } else if (fileExtension === 'lisp') {
-          parsedBlocks = parseLispCode(content);
-        } else {
-          console.error('Unsupported file type');
-          return;
-        }
+        console.error('Unsupported file type');
+        return;
       }
+
+      createDraggableWindows(parsedBlocks);
     })
     .catch((error) => {
       console.error("Error fetching the file:", error);
@@ -587,14 +585,16 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
 
 //end of fetch from github
 
-function parseJsCode(code) {
-  const regex = /(?:^|\s*)((?:function\s*\w*\s*\([^)]*\)\s*{[^}]*}|(?:const|let|var)\s+\w+\s*=[^;]*;|(?:(?:[\w$]+)\.)*(?:[\w$]+)\([^)]*\)(?:\.[\w$]+\(.*\))?|(?:(?:[\w$]+)\.)*(?:[\w$]+)\s*=>\s*{[^}]*}))/g;
+function parseJsCodeUsingAcorn(code) {
+  const ast = acorn.parse(code, { ecmaVersion: 'latest' });
   const blocks = [];
 
-  let match;
-  while ((match = regex.exec(code)) !== null) {
-    blocks.push(match[1]);
-  }
+  ast.body.forEach((node) => {
+    const start = code.substring(0, node.start).lastIndexOf('\n') + 1;
+    const end = code.indexOf('\n', node.end);
+    const block = code.substring(start, end === -1 ? code.length : end);
+    blocks.push(block.trim());
+  });
 
   return blocks;
 }
@@ -696,7 +696,7 @@ function parseLispCode(code) {
 const saveButton = document.getElementById("saveButton");
 
 saveButton.addEventListener("click", () => {
-  const branch = "wavyton-spaces";
+  //const branch = "wavyton-spaces";
   const commitMessage = "Update combined.lisp";
   
   const combinedCode = concatenateCodePieces();
@@ -755,14 +755,15 @@ async function pushFileToGitHub(owner, repo, branch, token, filePath, commitMess
 }
 
 
-function concatenateCodePieces() {
+function concatenateCodePieces(fileExtension) {
   const windows = document.querySelectorAll(".window");
   let concatenatedCode = "";
+  const commentChar = fileExtension === 'js' ? '//' : ';';
 
   windows.forEach((windowEl) => {
     const codeEl = windowEl.querySelector("pre");
     if (codeEl) {
-      concatenatedCode += `;code+${windowEl.id},${windowEl.style.left},${windowEl.style.top}\n`;
+      concatenatedCode += `${commentChar}code+${windowEl.id},${windowEl.style.left},${windowEl.style.top}\n`;
       concatenatedCode += codeEl.textContent;
       concatenatedCode += "\n\n"; // Add an empty line between code blocks
     }
@@ -770,6 +771,7 @@ function concatenateCodePieces() {
 
   return concatenatedCode;
 }
+
 
 //OpenAI
 
