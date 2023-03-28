@@ -618,8 +618,10 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
       const content = b64DecodeUnicode(data.content);
       fileExtension = filePath.split('.').pop().toLowerCase();
       let parsedBlocks = splitBlocks(content, fileExtension);
+      let useParsedBlocks = true;
 
       if (parsedBlocks.length === 0 || parsedBlocks.some(block => block === null)) {
+        let useParsedBlocks = no;
         if (fileExtension === 'js') {
           parsedBlocks = parseJsCodeUsingAcorn(content);
         } else if (fileExtension === 'lisp') {
@@ -629,7 +631,8 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
           return;
         }
       }
-      createDraggableWindows(parsedBlocks);
+
+      createDraggableWindows(parsedBlocks, useParsedBlocks);
     })
     .catch((error) => {
       console.error("Error fetching the file:", error);
@@ -654,24 +657,22 @@ function parseJsCodeUsingAcorn(code) {
 //code+window-76,25650px,20000px
 const splitBlocks = (text, fileExtension) => {
   const commentChar = fileExtension === 'js' ? '//' : ';';
-  const blocks = text.split(`${commentChar}code+window-`).slice(1);
-  const regexPattern = `^${commentChar}code\\+(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=${commentChar}code\\+window-|$)`;
+  const regexPattern = new RegExp(`${commentChar}code\\+window-(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=${commentChar}code\\+window-|$)`, 'g');
 
-  return blocks.map((block) => {
-    const match = block.match(new RegExp(regexPattern));
-    if (!match) {
-      console.log("Unmatched block content:", block);
-      return null;
-    }
+  let match;
+  const codeBlocks = [];
 
-    return {
+  while ((match = regexPattern.exec(text)) !== null) {
+    codeBlocks.push({
       id: parseInt(match[1], 10),
       x: parseInt(match[2], 10),
       y: parseInt(match[3], 10),
       code: match[4].trim(),
-    };
-  });
-};
+    });
+  }
+
+  return codeBlocks;
+}
 
 
 //code+window-77,25670px,20000px
