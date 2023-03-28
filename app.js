@@ -319,7 +319,7 @@ function endDrag() {
   document.removeEventListener("mousemove", moveWindow);
 }
 
-//code+window-41,24931px,19641px
+//code+window-41,24828px,19598px
 function moveWindow(e) {
   if (activeWindow) {
     const deltaX = e.clientX - offsetX;
