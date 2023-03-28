@@ -111,7 +111,7 @@ selectionBox.style.pointerEvents = "none";
 //code+window-22,24570px,20000px
 boardContainer.appendChild(selectionBox);
 
-//code+window-23,24590px,20000px
+//code+window-23,24529px,19617px
 boardContainer.addEventListener("mousedown", (e) => {
   // Return early if the Space button is down or panning is active
   if (dragBoard || isPanning) {
