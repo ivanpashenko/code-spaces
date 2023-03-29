@@ -51,7 +51,10 @@ function createDraggableWindows(codePieces, useParsedBlocks = false) {
   console.log("Creating draggable windows with:", codePieces, useParsedBlocks);
   const horizontalSpacing = 20;
 
-  const functionNameRegex = /(?:(?:tw-)?def[\w-]*)\s+([a-zA-Z0-9_]+)/;
+  const functionNameRegex = fileExtension === 'js'
+    ? /(?:(?:const|let|var)\s+([a-zA-Z0-9_]+)|([a-zA-Z0-9_]+\.\w+|\w+(?:\.\w+)*\s*=\s*function)|function\s+([a-zA-Z0-9_]+))/
+    : /(?:(?:tw-)?def[\w-]*)\s+([a-zA-Z0-9_]+)/;
+  //const functionNameRegex = /(?:(?:tw-)?def[\w-]*)\s+([a-zA-Z0-9_]+)/;
 
   codePieces.forEach((piece, index) => {
     const windowEl = document.createElement("div");
@@ -73,11 +76,11 @@ function createDraggableWindows(codePieces, useParsedBlocks = false) {
 
     // Extract function name and add it as a title
     const match = piece.match(functionNameRegex);
-    if (match && match[1]) {
+    if (match) {
       const titleEl = document.createElement("div");
       titleEl.classList.add("window-title");
       titleEl.style.transformOrigin = 'bottom left';
-      titleEl.textContent = match[1];
+      titleEl.textContent = match[1] || match[2] || match[3]; // Choose the first matched group
       windowEl.appendChild(titleEl);
     }
 
