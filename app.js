@@ -837,27 +837,33 @@ function concatenateCodePieces(fileExtension) {
 
 //code+window-82,31247.3px,18078.7px
 async function callOpenAI(prompt) {
-  const response = await fetch('https://openAI.ivanpashchenko2.repl.co/api/completion', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ prompt }),
-  });
+  try {
+    const response = await fetch('https://wavyton-spaces-server.ivanpashchenko2.repl.co/api/completion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ prompt }),
+    });
 
-  if (response.ok) {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
     const data = await response.json();
+    console.log("response: ", data);
     return data.completion;
-  } else {
-    throw new Error('Failed to call OpenAI API');
+  } catch (error) {
+    console.error('Error fetching completion:', error);
+    throw error;
   }
 }
 
 //code+window-83,27591px,19242.3px
-document.getElementById('testOpenAI').addEventListener('click', async () => {
+document.getElementById('btnopenai').addEventListener('click', async () => {
   try {
     const prompt = 'Translate the following English text to French: "Hello, how are you?"';
     const completion = await callOpenAI(prompt);
+    console.log("response: ", completion);
     document.getElementById('openAIOutput').value = completion;
   } catch (error) {
     console.error('Error:', error);
