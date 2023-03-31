@@ -90,11 +90,58 @@ function createDraggableWindows(codePieces, useParsedBlocks = false) {
 
     windowEl.style.position = "absolute";
     windowEl.addEventListener("mousedown", startDrag);
+    windowEl.addEventListener('dblclick', handleDoubleClick);
     board.appendChild(windowEl);
   });
 
   document.addEventListener("mouseup", endDrag);
+   
 }
+
+function handleDoubleClick(e) {
+  // Get the target code window
+  const codeWindow = e.currentTarget;
+
+  // Get the code block element inside the code window
+  const codeBlock = codeWindow.querySelector('pre');
+
+  // Make the code block content editable
+  codeBlock.contentEditable = "true";
+  codeBlock.focus();
+
+  // Add event listeners to handle when the editing is done
+  codeBlock.addEventListener('blur', finishEditing);
+  codeBlock.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.ctrlKey) {
+      e.preventDefault();
+      codeBlock.blur();
+    }
+  });
+}
+
+function finishEditing(e) {
+  const codeBlock = e.currentTarget;
+
+  // Disable contentEditable
+  codeBlock.contentEditable = "false";
+
+  // Remove the event listeners
+  codeBlock.removeEventListener('blur', finishEditing);
+  codeBlock.removeEventListener('keydown', handleKeyDown);
+
+  // Update the code in the code block
+  // You may need to perform additional actions here,
+  // such as saving the updated code or updating related data structures
+}
+
+function handleKeyDown(e) {
+  if (e.key === 'Enter' && e.ctrlKey) {
+    e.preventDefault();
+    const codeBlock = e.currentTarget;
+    codeBlock.blur();
+  }
+}
+
 
 //code+window-17,25084px,22928px
 const selectionBox = document.createElement("div");
