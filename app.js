@@ -313,8 +313,8 @@ function toggleWindowSelection(windowEl) {
 let initialPositions = new Map();
 
 //code+window-39,22181px,21975px
-function startDrag(e) {
-  if (dragBoard) {
+function startDrag(e) {  
+  if (dragBoard || isEditable()) {
     // Skip dragging and selecting windows when panning the board
     return;
   }
@@ -486,14 +486,21 @@ boardContainer.addEventListener("wheel", zoomWithScroll);
 //code+window-52,22175px,23168px
 let dragBoard = false;
 
-//code+window-53,20576px,15445px
-document.addEventListener("keydown", (e) => {
+function isEditable() {
   const focusedElement = document.activeElement;
-  const isEditable = focusedElement.tagName === 'INPUT' || focusedElement.contentEditable === 'true';
-  
+  return (
+    focusedElement.tagName === "INPUT" ||
+    focusedElement.tagName === "TEXTAREA" ||
+    focusedElement.contentEditable === "true"
+  );
+}
+
+
+//code+window-53,20576px,15445px
+document.addEventListener("keydown", (e) => {  
   if (e.code === "Space") {
     // If the focused element is editable, ignore the event
-    if (isEditable) {
+    if (isEditable()) {
       return;
     }
     e.preventDefault(); // Prevent default scrolling behavior

@@ -145,10 +145,11 @@
   </div>
   <div class="chatAI"">
     <form id="openAIForm">
-      <input type="text" id="prompt" name="prompt" placeholder="Enter your prompt">
+      <textarea type="text" id="prompt" name="prompt" rows=6>Enter your prompt</textarea>
+      <br>
       <button type="submit">Submit</button>
     </form>
-    <textarea id="openAIOutput" readonly></textarea>
+    <textarea id="openAIOutput" readonly rows=10></textarea>
   </div>
 
   <script src="app.js"></script>
