@@ -489,7 +489,14 @@ let dragBoard = false;
 
 //code+window-53,20576px,15445px
 document.addEventListener("keydown", (e) => {
+  const focusedElement = document.activeElement;
+  const isEditable = focusedElement.tagName === 'INPUT' || focusedElement.contentEditable === 'true';
+  
   if (e.code === "Space") {
+    // If the focused element is editable, ignore the event
+    if (isEditable) {
+      return;
+    }
     e.preventDefault(); // Prevent default scrolling behavior
     dragBoard = true;
   }
