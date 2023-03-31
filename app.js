@@ -1,52 +1,52 @@
-//code+window-0,20547.3px,17307.3px
+//code+window-0,20547px,17307px
 const boardContainer = document.getElementById("boardContainer");
 
-//code+window-1,20556.3px,17155.3px
+//code+window-1,20556px,17155px
 const board = document.getElementById("board");
 
-//code+window-2,19844.7px,20869.3px
+//code+window-2,19844px,20869px
 const zoomInButton = document.getElementById("zoomIn");
 
-//code+window-3,19822.7px,20705.3px
+//code+window-3,19822px,20705px
 const zoomOutButton = document.getElementById("zoomOut");
 
-//code+window-4,20521.3px,17928.3px
+//code+window-4,20521px,17928px
 const boardWidth = 50000; // Set the board width
 
-//code+window-5,20510.3px,17760.3px
+//code+window-5,20510px,17760px
 const boardHeight = 40000; // Set the board height
 
-//code+window-6,20530.3px,17455.3px
+//code+window-6,20530px,17455px
 board.style.width = `${boardWidth}px`;
 
-//code+window-7,20513.3px,17586.3px
+//code+window-7,20513px,17586px
 board.style.height = `${boardHeight}px`;
 
-//code+window-8,28415px,20081.3px
+//code+window-8,28415px,20081px
 let parsedBlocks = []
 
-//code+window-9,27639.4px,17833.6px
+//code+window-9,27639px,17833px
 let owner, repo, filePath, branch, token;
 
-//code+window-10,23748.4px,21758.7px
+//code+window-10,23748px,21758px
 let windowCounter = 0; // Add a window counter to assign unique IDs
 
 //code+window-11,20607px,15685px
 boardContainer.scrollLeft = (boardWidth - boardContainer.clientWidth) / 2;
 
-//code+window-12,20568.7px,16048.7px
+//code+window-12,20568px,16048px
 boardContainer.scrollTop = (boardHeight - boardContainer.clientHeight) / 2;
 
-//code+window-13,22430.4px,20398.7px
+//code+window-13,22430px,20398px
 let offsetX = 0;
 
-//code+window-14,22211.7px,20376.7px
+//code+window-14,22211px,20376px
 let offsetY = 0;
 
-//code+window-15,23758px,21950.3px
+//code+window-15,23758px,21950px
 let activeWindows = [];
 
-//code+window-16,22198.7px,21086px
+//code+window-16,22198px,21086px
 function createDraggableWindows(codePieces, useParsedBlocks = false) {
   console.log("Creating draggable windows with:", codePieces, useParsedBlocks);
   const horizontalSpacing = 20;
@@ -146,22 +146,22 @@ function handleKeyDown(e) {
 //code+window-17,25084px,22928px
 const selectionBox = document.createElement("div");
 
-//code+window-18,25087.3px,23103px
+//code+window-18,25087px,23103px
 selectionBox.style.position = "absolute";
 
-//code+window-19,25058.7px,23558.3px
+//code+window-19,25058px,23558px
 selectionBox.style.border = "1px dashed gray";
 
-//code+window-20,25085.7px,23344.7px
+//code+window-20,25085px,23344px
 selectionBox.style.backgroundColor = "rgba(50,50,50,0.2)";
 
 //code+window-21,23821px,27128px
 selectionBox.style.pointerEvents = "none";
 
-//code+window-22,20570px,14826.7px
+//code+window-22,20570px,14826px
 boardContainer.appendChild(selectionBox);
 
-//code+window-23,20540px,16691.7px
+//code+window-23,20540px,16691px
 boardContainer.addEventListener("mousedown", (e) => {
   // Return early if the Space button is down or panning is active
   if (dragBoard || isPanning) {
@@ -187,10 +187,10 @@ boardContainer.addEventListener("mousemove", updateSelection);
 //code+window-25,20551px,16242px
 boardContainer.addEventListener("mouseup", endSelection);
 
-//code+window-26,20583.7px,15865.3px
+//code+window-26,20583px,15865px
 boardContainer.addEventListener("mousedown", startPanning);
 
-//code+window-27,20571.7px,15228px
+//code+window-27,20571px,15228px
 boardContainer.addEventListener("mouseup", endPanning);
 
 //code+window-28,23739px,22482px
@@ -199,7 +199,7 @@ let isSelecting = false;
 //code+window-29,23767px,26657px
 let selectionStart = { x: 0, y: 0 };
 
-//code+window-30,22210.7px,20198.7px
+//code+window-30,22210px,20198px
 let startX, startY;
 
 //code+window-31,23692px,25814px
@@ -299,7 +299,7 @@ function selectWindowsInsideSelectionBox() {
 //code+window-36,23707px,26228px
 const selectedWindows = new Set();
 
-//code+window-37,23741.3px,22142px
+//code+window-37,23741px,22142px
 function toggleWindowSelection(windowEl) {
   if (selectedWindows.has(windowEl)) {
     selectedWindows.delete(windowEl);
@@ -310,7 +310,7 @@ function toggleWindowSelection(windowEl) {
   }
 }
 
-//code+window-38,22472px,18700.3px
+//code+window-38,22472px,18700px
 let initialPositions = new Map();
 
 //code+window-39,22181px,21975px
@@ -363,7 +363,7 @@ function startDrag(e) {
   }
 }
 
-//code+window-40,22176px,22890.3px
+//code+window-40,22176px,22890px
 function endDrag() {
   activeWindows = [];
   document.removeEventListener("mousemove", moveWindow);
@@ -391,13 +391,13 @@ function moveWindow(e) {
 //code+window-42,22470px,18514px
 let scale = 1;
 
-//code+window-43,22458.3px,18344.7px
+//code+window-43,22458px,18344px
 const scaleFactor = 0.03;
 
-//code+window-44,19933.7px,24187.7px
+//code+window-44,19933px,24187px
 let isPanning = false;
 
-//code+window-45,19967.7px,23816.7px
+//code+window-45,19967px,23816px
 let panStart = { x: 0, y: 0 };
 
 //code+window-46,23732px,24867px
@@ -408,10 +408,10 @@ function unselectAllWindows() {
   selectedWindows.clear();
 }
 
-//code+window-47,20470.3px,18179.3px
+//code+window-47,20470px,18179px
 board.style.transform = `scale(${scale})`;
 
-//code+window-48,19740.7px,22225.3px
+//code+window-48,19740px,22225px
 zoomInButton.addEventListener("click", () => {
   const prevScale = scale;
   scale += scaleFactor;
@@ -425,7 +425,7 @@ zoomInButton.addEventListener("click", () => {
   boardContainer.scrollTop = (centerY * scale) / prevScale - boardContainer.clientHeight / 2;
 });
 
-//code+window-49,19842.7px,21058.3px
+//code+window-49,19842px,21058px
 zoomOutButton.addEventListener("click", () => {
   const prevScale = scale;
   scale -= scaleFactor;
@@ -442,7 +442,7 @@ zoomOutButton.addEventListener("click", () => {
   boardContainer.scrollTop = (centerY * scale) / prevScale - boardContainer.clientHeight / 2;
 });
 
-//code+window-50,19902.7px,21515.3px
+//code+window-50,19902px,21515px
 function zoomWithScroll(e) {
   // Check if the 'Command' or 'Control' key is pressed
   if (e.metaKey || e.ctrlKey) {
@@ -481,13 +481,13 @@ function zoomWithScroll(e) {
   }
 }
 
-//code+window-51,20547.3px,16450px
+//code+window-51,20547px,16450px
 boardContainer.addEventListener("wheel", zoomWithScroll);
 
-//code+window-52,22175.7px,23168.3px
+//code+window-52,22175px,23168px
 let dragBoard = false;
 
-//code+window-53,20576px,15445.7px
+//code+window-53,20576px,15445px
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     e.preventDefault(); // Prevent default scrolling behavior
@@ -495,14 +495,14 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-//code+window-54,20577.3px,14549.7px
+//code+window-54,20577px,14549px
 document.addEventListener("keyup", (e) => {
   if (e.code === "Space") {
     dragBoard = false;
   }
 });
 
-//code+window-55,19942.7px,24509.7px
+//code+window-55,19942px,24509px
 function startPanning(e) {
   if (dragBoard && (e.target === board || e.target === boardContainer)) {
     isPanning = true;
@@ -513,14 +513,14 @@ function startPanning(e) {
   }
 }
 
-//code+window-56,19959.7px,25269.7px
+//code+window-56,19959px,25269px
 function endPanning() {
   isPanning = false;
   boardContainer.style.cursor = "";
   document.removeEventListener("mousemove", panBoard);
 }
 
-//code+window-57,19885.7px,24861.7px
+//code+window-57,19885px,24861px
 function panBoard(e) {
   if (isPanning) {
     e.preventDefault();
@@ -533,18 +533,18 @@ function panBoard(e) {
   }
 }
 
-//code+window-58,24204.8px,17777.6px
+//code+window-58,24204px,17777px
 let addTextMode = false;
 
-//code+window-59,24192.9px,16576.8px
+//code+window-59,24192px,16576px
 const addTextButton = document.getElementById("addTextButton");
 
-//code+window-60,24200.4px,16759.3px
+//code+window-60,24200px,16759px
 addTextButton.addEventListener("click", () => {
   addTextMode = !addTextMode;
 });
 
-//code+window-61,24200.1px,16404.2px
+//code+window-61,24200px,16404px
 let newTextElement = false;
 
 //code+window-62,24193px,16990px
@@ -591,48 +591,48 @@ function addTextToBoard(x, y) {
   textEl.focus();
 }
 
-//code+window-63,27634.7px,17637.6px
+//code+window-63,27634px,17637px
 const fetchButton = document.getElementById("fetchButton");
 
-//code+window-64,25617px,18241.7px
+//code+window-64,25617px,18241px
 const submitButton = document.getElementById("submit");
 
-//code+window-65,25613.4px,18065.4px
+//code+window-65,25613px,18065px
 const cancelButton = document.getElementById("cancel");
 
-//code+window-66,25644.7px,17861.4px
+//code+window-66,25644px,17861px
 const overlay = document.getElementById("overlay");
 
-//code+window-67,25659px,17665.4px
+//code+window-67,25659px,17665px
 const popup = document.getElementById("popup");
 
-//code+window-68,27615.4px,18705.7px
+//code+window-68,27615px,18705px
 function b64EncodeUnicode(str) {
   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
     return String.fromCharCode("0x" + p1);
   }));
 }
 
-//code+window-69,28363.1px,18708.3px
+//code+window-69,28363px,18708px
 function b64DecodeUnicode(str) {
   return decodeURIComponent(Array.prototype.map.call(atob(str), (c) => {
     return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
   }).join(""));
 }
 
-//code+window-70,27597px,18979.3px
+//code+window-70,27597px,18979px
 fetchButton.addEventListener("click", () => {
   overlay.style.display = "block";
   popup.style.display = "block";
 });
 
-//code+window-71,25597.4px,18425.1px
+//code+window-71,25597px,18425px
 cancelButton.addEventListener("click", () => {
   overlay.style.display = "none";
   popup.style.display = "none";
 });
 
-//code+window-72,30325.5px,21297.2px
+//code+window-72,30325px,21297px
 submitButton.addEventListener("click", () => {
   owner = document.getElementById("owner").value;
   repo = document.getElementById("repo").value;
@@ -648,7 +648,7 @@ submitButton.addEventListener("click", () => {
 //code+window-73,27629px,18457px
 let fileExtension;
 
-//code+window-74,27568.7px,20887.6px
+//code+window-74,27568px,20837px
 function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
   const headers = new Headers();
   headers.append("Authorization", `token ${token}`);
@@ -693,7 +693,7 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
     });
 }
 
-//code+window-75,27630.4px,18065.3px
+//code+window-75,27630px,18065px
 function parseJsCodeUsingAcorn(code) {
   const ast = acorn.parse(code, { ecmaVersion: 'latest' });
   const blocks = [];
@@ -708,7 +708,7 @@ function parseJsCodeUsingAcorn(code) {
   return blocks;
 }
 
-//code+window-751,27630.4px,18065.3px
+//code+window-751,29135.6px,17526.1px
 function generateOverview(code) {
   const ast = acorn.parse(code, { ecmaVersion: 'latest' });
   const overview = {
@@ -750,11 +750,7 @@ function generateOverview(code) {
   return overview;
 }
 
-
-
-//code+window-752,27630.4px,18065.3px
-
-
+//code+window-752,29113.4px,18287.1px
 function formatOverview(overview) {
   let formattedOverview = '';
 
@@ -774,9 +770,7 @@ document.getElementById('generate-overview').addEventListener('click', () => {
   console.log(formattedOverview);
 });
 
-
-
-//code+window-76,27562.7px,22978px
+//code+window-76,27562px,22978px
 const splitBlocks = (text, fileExtension) => {
   const commentChar = fileExtension === 'js' ? '//' : ';';
   const regexPattern = new RegExp(`${commentChar}code\\+window-(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=${commentChar}code\\+window-|$)`, 'g');
@@ -796,7 +790,7 @@ const splitBlocks = (text, fileExtension) => {
   return codeBlocks;
 }
 
-//code+window-77,27560.4px,21687.9px
+//code+window-77,27543.3px,21687px
 function parseLispCode(code) {
   let codeBlocks = [];
   let currentBlock = '';
@@ -871,10 +865,10 @@ function parseLispCode(code) {
   return codeBlocks.filter(block => block.length > 0);
 }
 
-//code+window-78,30333.3px,20918.3px
+//code+window-78,30333px,20918px
 const saveButton = document.getElementById("saveButton");
 
-//code+window-79,30336.5px,21054.3px
+//code+window-79,30336px,21054px
 saveButton.addEventListener("click", () => {
   //const branch = "wavyton-spaces";
   const commitMessage = "Update combined";
@@ -884,7 +878,7 @@ saveButton.addEventListener("click", () => {
   pushFileToGitHub(owner, repo, branch, token, filePath, commitMessage, combinedCode);
 });
 
-//code+window-80,30324.7px,21588.9px
+//code+window-80,30324px,21588px
 async function pushFileToGitHub(owner, repo, branch, token, filePath, commitMessage, content) {
   try {
     const headers = new Headers();
@@ -935,7 +929,7 @@ async function pushFileToGitHub(owner, repo, branch, token, filePath, commitMess
   }
 }
 
-//code+window-81,30314px,22575.3px
+//code+window-81,30314px,22575px
 function concatenateCodePieces(fileExtension) {
   const windows = document.querySelectorAll(".window");
   let concatenatedCode = "";
@@ -954,7 +948,7 @@ function concatenateCodePieces(fileExtension) {
   return concatenatedCode;
 }
 
-//code+window-82,31247.3px,18078.7px
+//code+window-82,31247px,18078px
 async function callOpenAI(prompt) {
   try {
     const response = await fetch('https://wavyton-spaces-server.ivanpashchenko2.repl.co/api/completion', {
@@ -977,7 +971,7 @@ async function callOpenAI(prompt) {
   }
 }
 
-//code+window-83,27591px,19242.3px
+//code+window-83,27591px,19242px
 document.getElementById('openAIForm').addEventListener('submit', async (event) => {
   event.preventDefault(); // Prevent the form from submitting and reloading the page
 
@@ -991,7 +985,7 @@ document.getElementById('openAIForm').addEventListener('submit', async (event) =
   }
 });
 
-//code+window-84,27569px,19908.3px
+//code+window-84,27569px,19908px
 async function getCodeBlockEmbeddings(codeBlocks) {
   const validCodeBlocks = codeBlocks.filter(block => block !== null && block !== undefined);
 
@@ -1016,7 +1010,7 @@ async function getCodeBlockEmbeddings(codeBlocks) {
   }
 }
 
-//code+window-85,27586.3px,19573.3px
+//code+window-85,27586px,19573px
 document.getElementById('generate-embeddings').addEventListener('click', async () => {
   try {
     const embeddings = await getCodeBlockEmbeddings(parsedBlocks);
@@ -1026,7 +1020,7 @@ document.getElementById('generate-embeddings').addEventListener('click', async (
   }
 });
 
-//code+window-86,27569px,20439.6px
+//code+window-86,27569px,20439px
 async function getCodeBlockEmbedding(codeBlock) {
   const response = await fetch('https://openai.ivanpashchenko2.repl.co/api/embeddings', {
     method: 'POST',
