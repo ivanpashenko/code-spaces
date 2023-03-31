@@ -635,6 +635,10 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
         }
       }
 
+      const overview = generateOverview(content);
+      const formattedOverview = formatOverview(overview);
+      console.log(formattedOverview);
+      
       createDraggableWindows(parsedBlocks, useParsedBlocks);
     })
     .catch((error) => {
@@ -656,6 +660,74 @@ function parseJsCodeUsingAcorn(code) {
 
   return blocks;
 }
+
+//code+window-751,27630.4px,18065.3px
+function generateOverview(code) {
+  const ast = acorn.parse(code, { ecmaVersion: 'latest' });
+  const overview = {
+    const: [],
+    let: [],
+    functionDefinitions: [],
+    topLevelExpressions: [],
+  };
+
+  ast.body.forEach((node) => {
+    if (node.type === 'VariableDeclaration') {
+      const kind = node.kind;
+      const declarations = node.declarations.map((declaration) => declaration.id.name);
+
+      if (kind === 'const') {
+        overview.const.push(...declarations);
+      } else if (kind === 'let') {
+        overview.let.push(...declarations);
+      }
+    } else if (node.type === 'FunctionDeclaration') {
+      overview.functionDefinitions.push(node.id.name);
+    } else if (node.type === 'ExpressionStatement') {
+      const start = code.substring(0, node.start).lastIndexOf('\n') + 1;
+      const end = code.indexOf('\n', node.end);
+      const expression = code.substring(start, end === -1 ? code.length : end);
+      const trimmedExpression = expression.trim();
+
+      if (trimmedExpression.includes('.style.')) {
+        // Ignore style-related expressions
+      } else if (trimmedExpression.includes('.addEventListener(')) {
+        const shortExpression = trimmedExpression.replace(/\{[\s\S]*\}/, '=> function)');
+        overview.topLevelExpressions.push(shortExpression);
+      } else {
+        overview.topLevelExpressions.push(trimmedExpression);
+      }
+    }
+  });
+
+  return overview;
+}
+
+
+
+//code+window-752,27630.4px,18065.3px
+
+
+function formatOverview(overview) {
+  let formattedOverview = '';
+
+  for (const key in overview) {
+    if (overview[key].length > 0) {
+      formattedOverview += `${key}: ${overview[key].join(', ')}\n`;
+    }
+  }
+
+  return formattedOverview.trim();
+}
+
+document.getElementById('generate-overview').addEventListener('click', () => {
+  const code = `Your code goes here`;
+  const overview = generateOverview(code);
+  const formattedOverview = formatOverview(overview);
+  console.log(formattedOverview);
+});
+
+
 
 //code+window-76,27562.7px,22978px
 const splitBlocks = (text, fileExtension) => {
@@ -859,9 +931,11 @@ async function callOpenAI(prompt) {
 }
 
 //code+window-83,27591px,19242.3px
-document.getElementById('btnopenai').addEventListener('click', async () => {
+document.getElementById('openAIForm').addEventListener('submit', async (event) => {
+  event.preventDefault(); // Prevent the form from submitting and reloading the page
+
   try {
-    const prompt = 'Translate the following English text to French: "Hello, how are you?"';
+    const prompt = document.getElementById('prompt').value;
     const completion = await callOpenAI(prompt);
     console.log("response: ", completion);
     document.getElementById('openAIOutput').value = completion;

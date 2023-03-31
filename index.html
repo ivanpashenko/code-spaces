@@ -126,6 +126,7 @@
 
   <div id="controls">
     <button id="addTextButton" style="margin-right: 40px">Add Text</button>
+    <button id="generate-overview">Generate Overview</button>
 
     <button id="fetchButton">Fetch File from GitHub</button>
     <button id="saveButton" style="margin-right: 20px">Save</button>
@@ -136,9 +137,11 @@
     <button id="zoomOut">-</button>
   </div>
   <div class="chatAI"">
-    <button id="btnopenai">Test OpenAI</button>
-    <!--     <button id=" btnOpenai">Test OpenAI</button> -->
-    <textarea id="openAIOutput" rows="10" cols="50"></textarea>
+    <form id="openAIForm">
+      <input type="text" id="prompt" name="prompt" placeholder="Enter your prompt">
+      <button type="submit">Submit</button>
+    </form>
+    <textarea id="openAIOutput" readonly></textarea>
   </div>
 
   <script src="app.js"></script>
