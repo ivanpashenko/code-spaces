@@ -142,7 +142,6 @@ function handleKeyDown(e) {
   }
 }
 
-
 //code+window-17,25084px,22928px
 const selectionBox = document.createElement("div");
 
@@ -708,7 +707,7 @@ function parseJsCodeUsingAcorn(code) {
   return blocks;
 }
 
-//code+window-751,29135.6px,17526.1px
+//code+window-751,29135px,17526px
 function generateOverview(code) {
   const ast = acorn.parse(code, { ecmaVersion: 'latest' });
   const overview = {
@@ -717,6 +716,8 @@ function generateOverview(code) {
     functionDefinitions: [],
     topLevelExpressions: [],
   };
+  
+  //test changing code
 
   ast.body.forEach((node) => {
     if (node.type === 'VariableDeclaration') {
@@ -750,7 +751,7 @@ function generateOverview(code) {
   return overview;
 }
 
-//code+window-752,29113.4px,18287.1px
+//code+window-752,29113px,18287px
 function formatOverview(overview) {
   let formattedOverview = '';
 
@@ -790,7 +791,7 @@ const splitBlocks = (text, fileExtension) => {
   return codeBlocks;
 }
 
-//code+window-77,27543.3px,21687px
+//code+window-77,27543px,21687px
 function parseLispCode(code) {
   let codeBlocks = [];
   let currentBlock = '';
