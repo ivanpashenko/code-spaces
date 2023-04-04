@@ -1086,20 +1086,20 @@ document.getElementById('openAIForm').addEventListener('submit', async (event) =
         role: "system",
         content: `Here is the code overview and relevant code blocks based on your previous question:
     
-    ${formattedOverview}
-    ${codeBlocks}
+        ${formattedOverview}
+        ${codeBlocks}
     
-    The highest id currently in use is ${highestId}. Please answer the user's question again, considering the following:
+        The highest id currently in use is ${highestId}. Please answer the user's question again, considering the following:
     
-    - If modifying existing code, use the same id and coordinates as the current code block, like this:
-      { code: code id: 2 x: 19844 y: 20869 }
+        - If modifying existing code, use the same id and coordinates as the current code block, like this:
+          { "code": "code snippet", "id": 2, "x": 19844, "y": 20869 }
     
-    - If creating a new code block, use an id greater than the highest id, and place it at coordinates 0, 0, like this:
-      { code: code id: ${highestId + 1} x: 0 y: 0 }
+        - If creating a new code block, use an id greater than the highest id, and place it at coordinates 0, 0, like this:
+          { "code": "code snippet", "id": ${highestId + 1}, "x": 0, "y": 0 }
     
-    Keep in mind that multiple new blocks can be created.
+        Keep in mind that multiple new blocks can be created.
     
-    IMPORTANT: Your response should strictly follow the provided format and only include the array of code blocks. There should be no other text besides the array elements.`,
+        IMPORTANT: Your response should strictly follow the provided format and only include the array of code blocks. There should be no other text besides the array elements.`,
       },
       {
         role: "user",
@@ -1111,10 +1111,11 @@ document.getElementById('openAIForm').addEventListener('submit', async (event) =
     completion = await callOpenAI(newMessages);
     console.log("response: ", completion);
 
-    const codeBlocksToUpdate = JSON.parse(openAIResponse);
+    const codeBlocksToUpdate = JSON.parse(completion);
+    console.log("response: ", codeBlocksToUpdate);
 
     // Update parsedBlocks and create/update draggable windows
-    codeBlocksToUpdate.forEach((block) => {
+    completion.forEach((block) => {
       const existingBlockIndex = parsedBlocks.findIndex((parsedBlock) => parsedBlock.id === block.id);
 
       if (existingBlockIndex !== -1) {
