@@ -19,6 +19,7 @@ const boardHeight = 40000; // Set the board height
 //code+window-6,20530px,17455px
 board.style.width = `${boardWidth}px`;
 
+
 //code+window-7,20513px,17586px
 board.style.height = `${boardHeight}px`;
 
@@ -142,6 +143,7 @@ function handleKeyDown(e) {
     codeBlock.blur();
   }
 }
+
 
 //code+window-17,25084px,22928px
 const selectionBox = document.createElement("div");
@@ -496,6 +498,7 @@ function isEditable() {
   );
 }
 
+
 //code+window-53,20576px,15445px
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
@@ -662,7 +665,6 @@ submitButton.addEventListener("click", () => {
 let fileExtension;
 
 let overview;
-
 //code+window-74,27568px,20837px
 function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
   const headers = new Headers();
@@ -744,6 +746,7 @@ function getCodeBlocksByIds(parsedBlocks, ids) {
   return codeBlocks;
 }
 
+
 //code+window-75,27630px,18065px
 function getCodeBlocksByIds(parsedBlocks, ids) {
   const codeBlocks = [];
@@ -814,6 +817,7 @@ function formatOverview(overview) {
   return formattedOverview.trim();
 }
 
+
 //code+window-76,27562px,22978px
 const splitBlocks = (text, fileExtension) => {
   const commentChar = fileExtension === 'js' ? '//' : ';';
@@ -859,6 +863,11 @@ function matchCodeBlocks(codeBlocks, searchTerms) {
 
   return matchedBlocks;
 }
+
+
+
+
+
 
 //code+window-77,27543px,21687px
 function parseLispCode(code) {
@@ -1041,6 +1050,7 @@ async function callOpenAI(messages) {
   }
 }
 
+
 //code+window-83,27591px,19242px
 document.getElementById('openAIForm').addEventListener('submit', async (event) => {
   event.preventDefault(); // Prevent the form from submitting and reloading the page
@@ -1141,6 +1151,8 @@ document.getElementById('openAIForm').addEventListener('submit', async (event) =
   }
 });
 
+
+
 //code+window-84,27569px,19908px
 async function getCodeBlockEmbeddings(codeBlocks) {
   const validCodeBlocks = codeBlocks.filter(block => block !== null && block !== undefined);
@@ -1193,7 +1205,4 @@ async function getCodeBlockEmbedding(codeBlock) {
     throw new Error('Failed to get code block embedding');
   }
 }
-
-//code+window-762,24300px,19633.3px
-saveButton.style.fontSize = '1.5em';
 
