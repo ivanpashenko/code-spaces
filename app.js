@@ -92,10 +92,11 @@ function createDraggableWindows(codePieces, useParsedBlocks = false) {
     windowEl.addEventListener("mousedown", startDrag);
     windowEl.addEventListener('dblclick', handleDoubleClick);
     board.appendChild(windowEl);
+
   });
 
   document.addEventListener("mouseup", endDrag);
-   
+
 }
 
 function handleDoubleClick(e) {
@@ -141,6 +142,7 @@ function handleKeyDown(e) {
     codeBlock.blur();
   }
 }
+
 
 //code+window-17,25084px,22928px
 const selectionBox = document.createElement("div");
@@ -313,7 +315,7 @@ function toggleWindowSelection(windowEl) {
 let initialPositions = new Map();
 
 //code+window-39,22181px,21975px
-function startDrag(e) {  
+function startDrag(e) {
   if (dragBoard || isEditable()) {
     // Skip dragging and selecting windows when panning the board
     return;
@@ -497,7 +499,7 @@ function isEditable() {
 
 
 //code+window-53,20576px,15445px
-document.addEventListener("keydown", (e) => {  
+document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     // If the focused element is editable, ignore the event
     if (isEditable()) {
@@ -661,6 +663,7 @@ submitButton.addEventListener("click", () => {
 //code+window-73,27629px,18457px
 let fileExtension;
 
+let overview;
 //code+window-74,27568px,20837px
 function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
   const headers = new Headers();
@@ -680,7 +683,7 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
     .then((data) => {
       const content = b64DecodeUnicode(data.content);
       fileExtension = filePath.split('.').pop().toLowerCase();
-      let parsedBlocks = splitBlocks(content, fileExtension);
+      parsedBlocks = splitBlocks(content, fileExtension);
       let useParsedBlocks = true;
 
       if (parsedBlocks.length === 0 || parsedBlocks.some(block => block === null)) {
@@ -695,10 +698,27 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
         }
       }
 
-      const overview = generateOverview(content);
+      overview = generateOverview(content);
       const formattedOverview = formatOverview(overview);
       console.log(formattedOverview);
-      
+
+      const searchTerms = [
+        { type: 'let', snippet: 'scale' },
+        {
+          type: 'topLevelExpressions',
+          snippet: 'boardContainer.scrollLeft = (boardWidth - boardContainer.clientWidth) / 2',
+        },
+        {
+          type: 'topLevelExpressions',
+          snippet: 'boardContainer.addEventListener("mousedown", (e) => ',
+        },
+      ];
+
+      const matchedResult = matchCodeBlocks(parsedBlocks, searchTerms);
+      console.log("matchedResult: ", matchedResult);
+
+      console.log("codeBlcocks: ", getCodeBlocksByIds(parsedBlocks, matchedResult));
+
       createDraggableWindows(parsedBlocks, useParsedBlocks);
     })
     .catch((error) => {
@@ -706,19 +726,37 @@ function fetchFileFromGitHub(owner, repo, branch, filePath, token) {
     });
 }
 
+//code+window-741,27630px,18065px
+function getCodeBlocksByIds(parsedBlocks, ids) {
+  const codeBlocks = [];
+  const idPattern = /\/\/code\+window-(\d+)/;
+
+  console.log("parsedBlocks in getBlcoksByIDs: ", parsedBlocks);
+
+  for (const block of parsedBlocks) {
+    //console.log(block);
+    const match = block.match(idPattern);
+
+    if (match && ids.includes(parseInt(match[1]))) {
+      codeBlocks.push(block);
+    }
+  }
+
+  return codeBlocks;
+}
+
+
 //code+window-75,27630px,18065px
-function parseJsCodeUsingAcorn(code) {
-  const ast = acorn.parse(code, { ecmaVersion: 'latest' });
-  const blocks = [];
+function getCodeBlocksByIds(parsedBlocks, ids) {
+  const codeBlocks = [];
 
-  ast.body.forEach((node) => {
-    const start = code.substring(0, node.start).lastIndexOf('\n') + 1;
-    const end = code.indexOf('\n', node.end);
-    const block = code.substring(start, end === -1 ? code.length : end);
-    blocks.push(block.trim());
-  });
+  for (const block of parsedBlocks) {
+    if (ids.includes(block.id)) {
+      codeBlocks.push(block);
+    }
+  }
 
-  return blocks;
+  return codeBlocks;
 }
 
 //code+window-751,29135px,17526px
@@ -730,7 +768,7 @@ function generateOverview(code) {
     functionDefinitions: [],
     topLevelExpressions: [],
   };
-  
+
   //test changing code
 
   ast.body.forEach((node) => {
@@ -749,15 +787,15 @@ function generateOverview(code) {
       const start = code.substring(0, node.start).lastIndexOf('\n') + 1;
       const end = code.indexOf('\n', node.end);
       const expression = code.substring(start, end === -1 ? code.length : end);
-      const trimmedExpression = expression.trim();
+      const firstLineExpression = expression.split('\n')[0].trim();
 
-      if (trimmedExpression.includes('.style.')) {
+      if (firstLineExpression.includes('.style.')) {
         // Ignore style-related expressions
-      } else if (trimmedExpression.includes('.addEventListener(')) {
-        const shortExpression = trimmedExpression.replace(/\{[\s\S]*\}/, '=> function)');
+      } else if (firstLineExpression.includes('.addEventListener(')) {
+        const shortExpression = firstLineExpression.replace(/\{[\s\S]*\}/, '');
         overview.topLevelExpressions.push(shortExpression);
       } else {
-        overview.topLevelExpressions.push(trimmedExpression);
+        overview.topLevelExpressions.push(firstLineExpression);
       }
     }
   });
@@ -778,12 +816,6 @@ function formatOverview(overview) {
   return formattedOverview.trim();
 }
 
-document.getElementById('generate-overview').addEventListener('click', () => {
-  const code = `Your code goes here`;
-  const overview = generateOverview(code);
-  const formattedOverview = formatOverview(overview);
-  console.log(formattedOverview);
-});
 
 //code+window-76,27562px,22978px
 const splitBlocks = (text, fileExtension) => {
@@ -804,6 +836,37 @@ const splitBlocks = (text, fileExtension) => {
 
   return codeBlocks;
 }
+
+//code+window-761,27562px,22978px
+function matchCodeBlocks(codeBlocks, searchTerms) {
+  const matchedBlocks = [];
+
+  const keywords = {
+    const: /^const\s+([a-zA-Z_$][a-zA-Z_$0-9]*)/,
+    let: /^let\s+([a-zA-Z_$][a-zA-Z_$0-9]*)/,
+    functionDefinitions: /^function\s+([a-zA-Z_$][a-zA-Z_$0-9]*)/,
+    topLevelExpressions: /^[a-zA-Z_$][a-zA-Z_$0-9]*\..*?\);?/,
+  };
+
+  for (const searchTerm of searchTerms) {
+    const { type, snippet } = searchTerm;
+    for (const block of codeBlocks) {
+      if (type in keywords) {
+        const regex = keywords[type];
+        if (regex.test(block.code) && block.code.includes(snippet)) {
+          matchedBlocks.push(block.id);
+        }
+      }
+    }
+  }
+
+  return matchedBlocks;
+}
+
+
+
+
+
 
 //code+window-77,27543px,21687px
 function parseLispCode(code) {
@@ -964,14 +1027,14 @@ function concatenateCodePieces(fileExtension) {
 }
 
 //code+window-82,31247px,18078px
-async function callOpenAI(prompt) {
+async function callOpenAI(messages) {
   try {
     const response = await fetch('https://wavyton-spaces-server.ivanpashchenko2.repl.co/api/completion', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ prompt }),
+      body: JSON.stringify({ messages }),
     });
 
     if (!response.ok) {
@@ -986,19 +1049,107 @@ async function callOpenAI(prompt) {
   }
 }
 
+
 //code+window-83,27591px,19242px
 document.getElementById('openAIForm').addEventListener('submit', async (event) => {
   event.preventDefault(); // Prevent the form from submitting and reloading the page
 
   try {
-    const prompt = document.getElementById('prompt').value;
-    const completion = await callOpenAI(prompt);
+    const userInput = document.getElementById('prompt').value;
+    console.log("here1");
+    //const overview = generateOverview(parsedBlocks);
+    console.log("here2");
+    const formattedOverview = formatOverview(overview);
+    console.log("here: ", formattedOverview);
+
+    const initialMessage = `Given a user's question about the code of the current project, which could be related to a specific functionality, copy changes, debugging, or a new feature (e.g., changing the button color), please return the relevant code references from the provided code overview ONLY. The code references should include the type (e.g., 'const', 'let', 'functionDefinitions', 'topLevelExpressions') and the corresponding code snippet. Do not provide references that are not part of the provided code overview. The code language is JavaScript. Please refer to the example provided:\nInput: “User: I want to change the color of the “Add text” button to red.”\nOutput: [ { type: 'const', snippet: 'addTextButton' }, ];\n\nHere is the code overview: ${formattedOverview}`;
+
+    const messages = [
+      { role: "system", content: initialMessage },
+      { role: "user", content: userInput },
+    ];
+
+    //const prompt = messages.map(msg => `${msg.role}: ${msg.content}`).join('\n');
+    let completion = await callOpenAI(messages);
     console.log("response: ", completion);
+
+    //const searchTerms = extractSearchTerms(completion);
+    const ids = matchCodeBlocks(parsedBlocks, completion);
+    const codeBlocks = getCodeBlocksByIds(parsedBlocks, ids);
+
+    const highestId = parsedBlocks.reduce((maxId, block) => {
+      return Math.max(maxId, block.id);
+    }, 0);
+
+    const newMessages = [
+      {
+        role: "system",
+        content: `Here is the code overview and relevant code blocks based on your previous question:
+    
+    ${formattedOverview}
+    ${codeBlocks}
+    
+    The highest id currently in use is ${highestId}. Please answer the user's question again, considering the following:
+    
+    - If modifying existing code, use the same id and coordinates as the current code block, like this:
+      { code: code id: 2 x: 19844 y: 20869 }
+    
+    - If creating a new code block, use an id greater than the highest id, and place it at coordinates 0, 0, like this:
+      { code: code id: ${highestId + 1} x: 0 y: 0 }
+    
+    Keep in mind that multiple new blocks can be created.
+    
+    IMPORTANT: Your response should strictly follow the provided format and only include the array of code blocks. There should be no other text besides the array elements.`,
+      },
+      {
+        role: "user",
+        content: userInput,
+      },
+    ];
+
+
+    completion = await callOpenAI(newMessages);
+    console.log("response: ", completion);
+
+    const codeBlocksToUpdate = JSON.parse(openAIResponse);
+
+    // Update parsedBlocks and create/update draggable windows
+    codeBlocksToUpdate.forEach((block) => {
+      const existingBlockIndex = parsedBlocks.findIndex((parsedBlock) => parsedBlock.id === block.id);
+
+      if (existingBlockIndex !== -1) {
+        // Update the existing block in parsedBlocks
+        parsedBlocks[existingBlockIndex].code = block.code;
+
+        // Update the draggable window on the board
+        const windowEl = document.getElementById(`window-${block.id}`);
+        if (windowEl) {
+          const codeEl = windowEl.querySelector("pre");
+          if (codeEl) {
+            codeEl.textContent = block.code;
+          }
+        }
+      } else {
+        // Add the new block to parsedBlocks
+        parsedBlocks.push({
+          id: block.id,
+          x: block.x,
+          y: block.y,
+          code: block.code,
+        });
+
+        // Create a new draggable window on the board
+        createDraggableWindows([parsedBlocks[parsedBlocks.length - 1]], true);
+      }
+    });
+
     document.getElementById('openAIOutput').value = completion;
   } catch (error) {
     console.error('Error:', error);
   }
 });
+
+
 
 //code+window-84,27569px,19908px
 async function getCodeBlockEmbeddings(codeBlocks) {
