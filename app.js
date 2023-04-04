@@ -1115,7 +1115,7 @@ document.getElementById('openAIForm').addEventListener('submit', async (event) =
     console.log("response: ", codeBlocksToUpdate);
 
     // Update parsedBlocks and create/update draggable windows
-    completion.forEach((block) => {
+    codeBlocksToUpdate.forEach((block) => {
       const existingBlockIndex = parsedBlocks.findIndex((parsedBlock) => parsedBlock.id === block.id);
 
       if (existingBlockIndex !== -1) {
