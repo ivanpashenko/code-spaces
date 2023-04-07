@@ -4,10 +4,10 @@ const boardContainer = document.getElementById("boardContainer");
 //code+window-1,20556px,17155px
 const board = document.getElementById("board");
 
-//code+window-2,19844px,20869px
+//code+window-2,18997.8px,20830.5px
 const zoomInButton = document.getElementById("zoomIn");
 
-//code+window-3,19822px,20705px
+//code+window-3,18975.8px,20666.5px
 const zoomOutButton = document.getElementById("zoomOut");
 
 //code+window-4,20521px,17928px
@@ -28,7 +28,7 @@ let parsedBlocks = []
 //code+window-9,27639px,17833px
 let owner, repo, filePath, branch, token;
 
-//code+window-10,23748px,21758px
+//code+window-10,23757.3px,21841.7px
 let windowCounter = 0; // Add a window counter to assign unique IDs
 
 //code+window-11,20607px,15685px
@@ -37,16 +37,16 @@ boardContainer.scrollLeft = (boardWidth - boardContainer.clientWidth) / 2;
 //code+window-12,20568px,16048px
 boardContainer.scrollTop = (boardHeight - boardContainer.clientHeight) / 2;
 
-//code+window-13,22430px,20398px
+//code+window-13,22165.2px,23234.9px
 let offsetX = 0;
 
-//code+window-14,22211px,20376px
+//code+window-14,22164px,23319.8px
 let offsetY = 0;
 
 //code+window-15,23758px,21950px
 let activeWindows = [];
 
-//code+window-16,22198px,21086px
+//code+window-16,22148.3px,23498.3px
 function createDraggableWindows(codePieces, useParsedBlocks = false) {
   console.log("Creating draggable windows with:", codePieces, useParsedBlocks);
   const horizontalSpacing = 20;
@@ -143,19 +143,19 @@ function handleKeyDown(e) {
   }
 }
 
-//code+window-17,25084px,22928px
+//code+window-17,24952.4px,23238.5px
 const selectionBox = document.createElement("div");
 
-//code+window-18,25087px,23103px
+//code+window-18,24955.4px,23413.5px
 selectionBox.style.position = "absolute";
 
-//code+window-19,25058px,23558px
+//code+window-19,24926.4px,23868.5px
 selectionBox.style.border = "1px dashed gray";
 
-//code+window-20,25085px,23344px
+//code+window-20,24953.4px,23654.5px
 selectionBox.style.backgroundColor = "rgba(50,50,50,0.2)";
 
-//code+window-21,23821px,27128px
+//code+window-21,23631.5px,25906.9px
 selectionBox.style.pointerEvents = "none";
 
 //code+window-22,20570px,14826px
@@ -193,23 +193,23 @@ boardContainer.addEventListener("mousedown", startPanning);
 //code+window-27,20571px,15228px
 boardContainer.addEventListener("mouseup", endPanning);
 
-//code+window-28,23739px,22482px
+//code+window-28,23736.7px,22302.9px
 let isSelecting = false;
 
-//code+window-29,23767px,26657px
+//code+window-29,23645.9px,25709.6px
 let selectionStart = { x: 0, y: 0 };
 
-//code+window-30,22210px,20198px
+//code+window-30,22189.1px,23166.4px
 let startX, startY;
 
-//code+window-31,23692px,25814px
+//code+window-31,23660.4px,25277.2px
 function updateSelectionBoxBorder() {
   // Adjust the border size based on the current zoom level
   const borderSize = 1 / scale; // Adjust this calculation if needed
   selectionBox.style.borderWidth = borderSize + 'px';
 }
 
-//code+window-32,23679px,23758px
+//code+window-32,23684.3px,23584.3px
 function startSelection(e) {
   if (e.target === board || e.target === boardContainer) {
 
@@ -256,7 +256,7 @@ function updateSelection(e) {
   }
 }
 
-//code+window-34,23651px,24370px
+//code+window-34,23661.5px,24122.6px
 function endSelection() {
   if (isSelecting) {
     selectWindowsInsideSelectionBox(); // Call the function to select windows inside the selection box
@@ -272,7 +272,7 @@ function endSelection() {
   }
 }
 
-//code+window-35,23717px,25193px
+//code+window-35,23643.3px,24771.9px
 function selectWindowsInsideSelectionBox() {
   console.log("here")
 
@@ -296,10 +296,10 @@ function selectWindowsInsideSelectionBox() {
   });
 }
 
-//code+window-36,23707px,26228px
+//code+window-36,23649.1px,25528px
 const selectedWindows = new Set();
 
-//code+window-37,23741px,22142px
+//code+window-37,23745.7px,22056px
 function toggleWindowSelection(windowEl) {
   if (selectedWindows.has(windowEl)) {
     selectedWindows.delete(windowEl);
@@ -313,7 +313,7 @@ function toggleWindowSelection(windowEl) {
 //code+window-38,22472px,18700px
 let initialPositions = new Map();
 
-//code+window-39,22181px,21975px
+//code+window-39,22145.1px,25245.2px
 function startDrag(e) {
   if (dragBoard || isEditable()) {
     // Skip dragging and selecting windows when panning the board
@@ -363,13 +363,13 @@ function startDrag(e) {
   }
 }
 
-//code+window-40,22176px,22890px
+//code+window-40,22153.5px,25037.2px
 function endDrag() {
   activeWindows = [];
   document.removeEventListener("mousemove", moveWindow);
 }
 
-//code+window-41,22209px,20620px
+//code+window-41,22679.8px,23165.1px
 function moveWindow(e) {
   if (activeWindow) {
     const deltaX = e.clientX - offsetX;
@@ -394,13 +394,13 @@ let scale = 1;
 //code+window-43,22458px,18344px
 const scaleFactor = 0.03;
 
-//code+window-44,19933px,24187px
+//code+window-44,21022.4px,23413.3px
 let isPanning = false;
 
-//code+window-45,19967px,23816px
+//code+window-45,21030.1px,23247.6px
 let panStart = { x: 0, y: 0 };
 
-//code+window-46,23732px,24867px
+//code+window-46,23658.3px,24514.4px
 function unselectAllWindows() {
   selectedWindows.forEach((windowEl) => {
     windowEl.style.border = "";
@@ -411,7 +411,7 @@ function unselectAllWindows() {
 //code+window-47,20470px,18179px
 board.style.transform = `scale(${scale})`;
 
-//code+window-48,19740px,22225px
+//code+window-48,18893.8px,22186.5px
 zoomInButton.addEventListener("click", () => {
   const prevScale = scale;
   scale += scaleFactor;
@@ -425,7 +425,7 @@ zoomInButton.addEventListener("click", () => {
   boardContainer.scrollTop = (centerY * scale) / prevScale - boardContainer.clientHeight / 2;
 });
 
-//code+window-49,19842px,21058px
+//code+window-49,18995.8px,21019.5px
 zoomOutButton.addEventListener("click", () => {
   const prevScale = scale;
   scale -= scaleFactor;
@@ -442,7 +442,7 @@ zoomOutButton.addEventListener("click", () => {
   boardContainer.scrollTop = (centerY * scale) / prevScale - boardContainer.clientHeight / 2;
 });
 
-//code+window-50,19902px,21515px
+//code+window-50,19055.8px,21476.5px
 function zoomWithScroll(e) {
   // Check if the 'Command' or 'Control' key is pressed
   if (e.metaKey || e.ctrlKey) {
@@ -484,7 +484,7 @@ function zoomWithScroll(e) {
 //code+window-51,20547px,16450px
 boardContainer.addEventListener("wheel", zoomWithScroll);
 
-//code+window-52,22175px,23168px
+//code+window-52,22676.6px,25024.1px
 let dragBoard = false;
 
 function isEditable() {
@@ -515,7 +515,7 @@ document.addEventListener("keyup", (e) => {
   }
 });
 
-//code+window-55,19942px,24509px
+//code+window-55,21015.6px,23593.2px
 function startPanning(e) {
   if (dragBoard && (e.target === board || e.target === boardContainer)) {
     isPanning = true;
@@ -526,14 +526,14 @@ function startPanning(e) {
   }
 }
 
-//code+window-56,19959px,25269px
+//code+window-56,20995.8px,24163.8px
 function endPanning() {
   isPanning = false;
   boardContainer.style.cursor = "";
   document.removeEventListener("mousemove", panBoard);
 }
 
-//code+window-57,19885px,24861px
+//code+window-57,20995.5px,23840px
 function panBoard(e) {
   if (isPanning) {
     e.preventDefault();
@@ -814,7 +814,7 @@ function formatOverview(overview) {
   return formattedOverview.trim();
 }
 
-//code+window-76,27562px,22978px
+//code+window-76,27555.3px,23378px
 const splitBlocks = (text, fileExtension) => {
   const commentChar = fileExtension === 'js' ? '//' : ';';
   const regexPattern = new RegExp(`${commentChar}code\\+window-(\\d+),(\\d+(?:\\.\\d+)?)px,(\\d+(?:\\.\\d+)?)px\\n?([\\s\\S]*?)(?=${commentChar}code\\+window-|$)`, 'g');
@@ -834,7 +834,7 @@ const splitBlocks = (text, fileExtension) => {
   return codeBlocks;
 }
 
-//code+window-761,27562px,22978px
+//code+window-761,27528.6px,23824.7px
 function matchCodeBlocks(codeBlocks, searchTerms) {
   const matchedBlocks = [];
 
@@ -860,7 +860,7 @@ function matchCodeBlocks(codeBlocks, searchTerms) {
   return matchedBlocks;
 }
 
-//code+window-77,27543px,21687px
+//code+window-77,27536.3px,22087px
 function parseLispCode(code) {
   let codeBlocks = [];
   let currentBlock = '';
@@ -1194,9 +1194,12 @@ async function getCodeBlockEmbedding(codeBlock) {
   }
 }
 
-//code+window-762,28353.9px,15791.3px
+//code+window-762,28353px,15791px
 saveButton.style.fontSize = '20px';
 
-//code+window-763,28365.1px,15641.3px
+//code+window-763,28365px,15641px
 saveButton.style.backgroundColor = 'red';
+
+//code+window-764,19600.1px,19283.3px
+addTextButton.style.backgroundColor = 'green';
 
