@@ -50,14 +50,6 @@
       white-space: pre-wrap;
       overflow-wrap: break-word;
     }
-    
-    pre[contenteditable="true"] {
-      caret-color: black;
-      outline: none;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
-
     .window-title {
       position: absolute;
       top: -30px;
@@ -86,7 +78,6 @@
       padding: 20px;
       z-index: 100;
     }
-
     .overlay {
       display: none;
       position: fixed;
@@ -97,7 +88,6 @@
       background: rgba(0, 0, 0, 0.5);
       z-index: 99;
     }
-
     .ignore-pointer-events {
       pointer-events: none;
     }
@@ -109,7 +99,7 @@
   <div id="boardContainer">
     <div id="board"></div>
   </div>
-
+  
   <div class="overlay" id="overlay"></div>
   <div class="popup" id="popup">
     <label for="owner">Owner:</label>
@@ -130,26 +120,21 @@
     <button id="submit">Fetch</button>
     <button id="cancel">Cancel</button>
   </div>
-
+  
   <div id="controls">
     <button id="addTextButton" style="margin-right: 40px">Add Text</button>
-    <button id="generate-overview">Generate Overview</button>
 
     <button id="fetchButton">Fetch File from GitHub</button>
     <button id="saveButton" style="margin-right: 20px">Save</button>
-
+    
     <button id="generate-embeddings" style="margin-right: 20px">Generate Embeddings</button>
 
     <button id="zoomIn">+</button>
     <button id="zoomOut">-</button>
   </div>
-  <div class="chatAI"">
-    <form id="openAIForm">
-      <textarea type="text" id="prompt" name="prompt" rows=6>Enter your prompt</textarea>
-      <br>
-      <button type="submit">Submit</button>
-    </form>
-    <textarea id="openAIOutput" readonly rows=10></textarea>
+  <div class="chatAI" style="display:none">
+    <button id="testOpenAI">Test OpenAI</button>
+    <textarea id="openAIOutput" rows="10" cols="50"></textarea>
   </div>
 
   <script src="app.js"></script>
