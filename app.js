@@ -282,7 +282,7 @@ function selectWindowsInsideSelectionBox() {
   document.querySelectorAll('.window').forEach((windowEl) => {
     const w = windowEl.getBoundingClientRect()
 
-    console.log("w.left: ", w.left, "sb.left: ", sb.left, "sb.right: ", sb.right, "w.left", w.left);
+    //console.log("w.left: ", w.left, "sb.left: ", sb.left, "sb.right: ", sb.right, "w.left", w.left);
     // Check if the selection box intersects with the current code window
     if (sb.left < w.right &&
       sb.right > w.left &&
